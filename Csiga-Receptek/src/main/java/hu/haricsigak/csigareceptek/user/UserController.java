@@ -23,36 +23,35 @@ public class UserController {
 
     @GetMapping
     public List<User> getUsers() {
-        return userService.getUsers();
+        return this.userService.getUsers();
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable(value = "id") Long id) {
-        if (userService.getUser(id).isEmpty()) throw new ResponseStatusException(NOT_FOUND, "Unable to find user");
-        return userService.getUser(id).orElse(null);
+        return this.userService.getUser(id).orElseThrow(() ->
+                new ResponseStatusException(NOT_FOUND, "Unable to find user"));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable(value = "id") Long id) {
-        if (!userService.deleteUser(id)) throw new ResponseStatusException(NOT_FOUND, "Unable to find user");
+        if (!this.userService.deleteUser(id)) throw new ResponseStatusException(NOT_FOUND, "Unable to find user");
     }
-
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     public void addUser(@RequestBody User user) {
-        if (!userService.addUser(user.getName(), user.getPassword()))
+        if (!this.userService.addUser(user.getUsername(), user.getPassword()))
             throw new ResponseStatusException(CONFLICT, "Username already taken");
     }
 
     @PutMapping("/{id}")
-    public void addUser(
+    public void updateUser(
             @PathVariable("id") Long id,
-            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String username,
             @RequestParam(required = false) String password
             ) {
-        userService.updateUser(id, name, password);
+        this.userService.updateUser(id, username, password);
     }
 
 }
