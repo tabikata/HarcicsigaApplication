@@ -1,10 +1,13 @@
-CREATE DATABASE my_database;
+CREATE DATABASE receptek_db;
 
-USE my_database;
+USE receptek_db;
+
+drop table recipe;
+drop table user;
 
 CREATE TABLE user (
     id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
@@ -16,15 +19,15 @@ CREATE TABLE recipe (
     steps TEXT,
     author_id INT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (author_id) REFERENCES user(id)
+    FOREIGN KEY (author_id) REFERENCES user(id) on delete cascade
 );
 
-INSERT INTO user (name, password) VALUES
-    ('Alice', 'password123'),
-    ('Bob', 'letmein'),
-    ('Charlie', '123456'),
-    ('Dave', 'password'),
-    ('Eve', 'secret');
+INSERT INTO user (username, password) VALUES
+    ('Alice', '$2a$10$Vic36aKvCgqfOVwLXeHNruEHRl9R8rUlGQ2mRQHdj2lwADSa.3rSS'),
+    ('Bob', '$2a$10$ITZqc4TJa1SsgA9O1a2Zc.WpRheYTQ0i4K3xJM41kFECvhy7BQVMW'),
+    ('Charlie', '$2a$10$TQoiCsUI1woZ9pbuaYl1w.oT2Jjumzw1rG1JHN5A3j7KqpBgPk.fW'),
+    ('Dave', '$2a$10$WflmHPMZr4LS2FOCycBlGOLuqS3jt7nVgEVm/bUa7Hfvg1Q26FeOS'),
+    ('Eve', '$2a$10$U77eTu4wqKcnx5r41skoSeM3eia7Rs80e1oMbknrcrNgRfzvVA1Ge');
 
 INSERT INTO recipe (name, ingredients, steps, author_id) VALUES
     ('Spaghetti Bolognese', 'spaghetti, ground beef, tomatoes, onion, garlic', '1. Cook spaghetti. 2. Brown ground beef with onion and garlic. 3. Add tomatoes and cook for 10 minutes. 4. Serve sauce over spaghetti.', 1),
